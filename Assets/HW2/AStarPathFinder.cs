@@ -18,7 +18,9 @@ public class AStarPathFinder : GreedyPathFinder
 
         PriorityQueue<AStarNode> openSet = new PriorityQueue<AStarNode>();
         openSet.Enqueue(start);
+
         Dictionary<string, float> gScores = new Dictionary<string, float>();
+        List<GraphNode> closedSet = new List<GraphNode>();
 
         int attempts = 0;
         while (openSet.Count() > 0 && attempts < 10000)
@@ -34,14 +36,22 @@ public class AStarPathFinder : GreedyPathFinder
                 return ReconstructPath(start, currNode);
             }
 
+            closedSet.Add(currNode.GraphNode); // Add to closed set
+
             //Check each neighbor
             foreach (GraphNode neighbour in currNode.GraphNode.Neighbors)
             {
+                if (closedSet.Contains(neighbour))
+                {
+                    continue;
+                }
+
                 gScore = currNode.GetGScore() + ObstacleHandler.Instance.GridSize;
 
-                AStarNode aStarNeighbour = new AStarNode(currNode, neighbour, Heuristic(neighbour, goalNode));
-                openSet.Enqueue(aStarNeighbour);
+                // this line is what's leading us to open nodes
+                AStarNode aStarNeighbour = new AStarNode(currNode, neighbour, Heuristic(neighbour, goalNode)); // we want to minimize how often we're calling this line
 
+                openSet.Enqueue(aStarNeighbour);
             }
         }
         Debug.Log("CHECKED " + nodesOpened + " NODES");
