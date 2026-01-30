@@ -7,7 +7,8 @@ public class AStarPathFinder : GreedyPathFinder
 {
     public static int nodesOpened = 0;
 
-    //ASSIGNMENT 2: EDIT BELOW THIS LINE, IMPLEMENT A*
+    //ASSIGNMENT 2: EDIT BELOW THIS LINE, IMPLEMENT A* 
+    // goal: fix the path-finding by implementing A*
     public override Vector3[] CalculatePath(GraphNode startNode, GraphNode goalNode)
     {
         nodesOpened = 0;
@@ -20,7 +21,7 @@ public class AStarPathFinder : GreedyPathFinder
         Dictionary<string, float> gScores = new Dictionary<string, float>();
 
         int attempts = 0;
-        while (openSet.Count() > 0 && attempts<10000)
+        while (openSet.Count() > 0 && attempts < 10000)
         {
             attempts += 1;
             AStarNode currNode = openSet.Dequeue();
@@ -37,13 +38,13 @@ public class AStarPathFinder : GreedyPathFinder
             foreach (GraphNode neighbour in currNode.GraphNode.Neighbors)
             {
                 gScore = currNode.GetGScore() + ObstacleHandler.Instance.GridSize;
-                    
+
                 AStarNode aStarNeighbour = new AStarNode(currNode, neighbour, Heuristic(neighbour, goalNode));
                 openSet.Enqueue(aStarNeighbour);
-                
+
             }
         }
-        Debug.Log("CHECKED "+ nodesOpened + " NODES");
+        Debug.Log("CHECKED " + nodesOpened + " NODES");
         return null;
     }
     //ASSIGNMENT 2: EDIT ABOVE THIS LINE, IMPLEMENT A*
@@ -51,7 +52,7 @@ public class AStarPathFinder : GreedyPathFinder
     //EXTRA CREDIT ASSIGNMENT 2 EDIT BELOW THIS LINE
     public float Heuristic(GraphNode currNode, GraphNode goalNode)
     {
-        return (Mathf.Abs(currNode.Location.x-goalNode.Location.x) + Mathf.Abs(currNode.Location.y - goalNode.Location.y));
+        return (Mathf.Abs(currNode.Location.x - goalNode.Location.x) + Mathf.Abs(currNode.Location.y - goalNode.Location.y));
     }
     //EXTRA CREDIT ASSIGNMENT 2 EDIT ABOVE THIS LINE
 
